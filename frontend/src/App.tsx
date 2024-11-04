@@ -1,10 +1,28 @@
 import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import './App.css';
 import { Task, TaskStatus } from './App.type';
+import { getTasks } from './api/tasks';
 
 function App() {
-  const [tasks, setTasks] = useState<Task[]>([]);
   const [newTaskName, setNewTaskName] = useState<string>('');
+
+  const {
+    data: tasks = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ['tasks'],
+    queryFn: getTasks,
+  });
+
+  if (isLoading) {
+    return <div>Loading tasks...</div>;
+  }
+
+  if (error) {
+    return <div>Error loading tasks: {error.message}</div>;
+  }
 
   const addTask = () => {
     // TODO: add implementation
@@ -34,8 +52,8 @@ function App() {
       <table className="taskItems">
         <tbody>
           {tasks
-            .filter((task) => task.status === TaskStatus.Todo)
-            .map((task) => (
+            .filter((task: Task) => task.status === TaskStatus.Todo)
+            .map((task: Task) => (
               <tr key={task.id}>
                 <td>{task.name}</td>
                 <td>
