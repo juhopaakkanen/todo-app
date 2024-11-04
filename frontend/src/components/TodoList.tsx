@@ -14,6 +14,9 @@ export function TodoList({
   onMarkDone,
   onMarkUndone,
 }: TodoListProps) {
+  if (tasks.length === 0)
+    return <div>No tasks currently, use the form above to add tasks</div>;
+
   return (
     <div className="todo-lists">
       <h2>{list.name}</h2>

@@ -1,13 +1,17 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
 import './App.css';
 import { Task, TaskStatus } from './App.type';
 import { getTasks } from './api/tasks';
 import { useSort, sortFunctions } from './hooks/useSort';
 import { AddTaskForm } from './components/AddTaskForm';
 import { TodoList } from './components/TodoList';
+import { DEFAULT_LISTS } from './constants/lists';
+import ListSelector from './components/ListSelector';
 
 function App() {
   const queryClient = useQueryClient();
+  const [selectedListId, setSelectedListId] = useState(DEFAULT_LISTS[0].id);
 
   const {
     data: tasks = [],
@@ -18,11 +22,16 @@ function App() {
     queryFn: getTasks,
   });
 
+  const selectedList = DEFAULT_LISTS.find(
+    (list) => list.id === selectedListId,
+  )!;
+  const filteredTasks = tasks.filter((task) => task.listId === selectedListId);
+
   const {
     sortedItems: sortedTasks,
     sortDirection,
     toggleSort,
-  } = useSort<Task>(tasks, {
+  } = useSort<Task>(filteredTasks, {
     initialSortBy: 'createdAt',
     initialDirection: 'desc',
     customSortFns: {
@@ -39,7 +48,7 @@ function App() {
       name: taskName,
       status: TaskStatus.Todo,
       createdAt: new Date().toISOString(),
-      listId: 1,
+      listId: selectedListId,
     };
 
     queryClient.setQueryData(['tasks'], (oldTasks: Task[] = []) => [
@@ -65,8 +74,15 @@ function App() {
   };
 
   return (
-    <div>
-      <h2>ToDo App</h2>
+    <main>
+      <h1>ToDo App</h1>
+
+      <ListSelector
+        lists={DEFAULT_LISTS}
+        selectedListId={selectedListId}
+        onSelectList={setSelectedListId}
+      />
+
       <AddTaskForm onAdd={handleAddTask} />
 
       <div className="sort-control">
@@ -76,12 +92,12 @@ function App() {
       </div>
 
       <TodoList
-        list={{ id: 1, name: 'Personal' }}
+        list={selectedList}
         tasks={sortedTasks}
         onMarkDone={handleMarkAsDone}
         onMarkUndone={handleMarkAsUndone}
       />
-    </div>
+    </main>
   );
 }
 

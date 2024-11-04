@@ -15,14 +15,21 @@ export function TaskList({
   onStatusChange,
   buttonText,
 }: TaskListProps) {
+  const filteredTasks = tasks.filter((task) => task.status === status);
+  const hasNoTasks = filteredTasks.length === 0;
+  const isDoneList = status === TaskStatus.Done;
+
   return (
-    <>
+    <section className="task-list">
       <h3>{title}</h3>
-      <table className="taskItems">
-        <tbody>
-          {tasks
-            .filter((task) => task.status === status)
-            .map((task) => (
+      {hasNoTasks ? (
+        <p className="empty-state">
+          {isDoneList ? 'Get to work!' : 'Excellent! All tasks are done!'}
+        </p>
+      ) : (
+        <table className="taskItems">
+          <tbody>
+            {filteredTasks.map((task) => (
               <tr key={task.id}>
                 <td>{task.name}</td>
                 <td>
@@ -32,8 +39,9 @@ export function TaskList({
                 </td>
               </tr>
             ))}
-        </tbody>
-      </table>
-    </>
+          </tbody>
+        </table>
+      )}
+    </section>
   );
 }
