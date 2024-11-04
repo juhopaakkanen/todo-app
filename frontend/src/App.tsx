@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import './App.css';
 import { Task, TaskStatus } from './App.type';
 import { getTasks } from './api/tasks';
+import { useSort, sortFunctions } from './hooks/useSort';
 
 function App() {
   const [newTaskName, setNewTaskName] = useState<string>('');
@@ -16,13 +17,20 @@ function App() {
     queryFn: getTasks,
   });
 
-  if (isLoading) {
-    return <div>Loading tasks...</div>;
-  }
+  const {
+    sortedItems: sortedTasks,
+    sortDirection,
+    toggleSort,
+  } = useSort<Task>(tasks, {
+    initialSortBy: 'createdAt',
+    initialDirection: 'desc',
+    customSortFns: {
+      createdAt: sortFunctions.date('createdAt'),
+    },
+  });
 
-  if (error) {
-    return <div>Error loading tasks: {error.message}</div>;
-  }
+  if (isLoading) return <div>Loading tasks...</div>;
+  if (error) return <div>Error loading tasks: {error.message}</div>;
 
   const addTask = () => {
     // TODO: add implementation
@@ -48,10 +56,17 @@ function App() {
         />
         <button onClick={addTask}>Add</button>
       </div>
+
       <h3>Tasks</h3>
+      <div className="sort-control">
+        <button onClick={() => toggleSort('createdAt')}>
+          Sort by date {sortDirection === 'asc' ? '↑' : '↓'}
+        </button>
+      </div>
+
       <table className="taskItems">
         <tbody>
-          {tasks
+          {sortedTasks
             .filter((task: Task) => task.status === TaskStatus.Todo)
             .map((task: Task) => (
               <tr key={task.id}>
@@ -68,7 +83,7 @@ function App() {
       <h3>Done</h3>
       <table className="taskItems">
         <tbody>
-          {tasks
+          {sortedTasks
             .filter((task) => task.status === TaskStatus.Done)
             .map((task) => (
               <tr key={task.id}>
