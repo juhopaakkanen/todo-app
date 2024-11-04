@@ -1,8 +1,29 @@
 # ToDo App
 
-## Requirements
+## Quick Start with Docker
 
-Node.js version v20.16.0 was used when initializing the project. It might also work with newer versions.
+Build and start all services
+
+```bash
+docker-compose up --build
+```
+
+Stop all services
+
+```bash
+docker-compose down
+```
+
+## Prerequisites
+
+### Docker Setup
+
+- Docker
+- Docker Compose
+
+### Local Setup
+
+- Node.js v20.16.0 (or newer)
 
 ## Project setup and usage
 
