@@ -1,12 +1,13 @@
-import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import './App.css';
 import { Task, TaskStatus } from './App.type';
 import { getTasks } from './api/tasks';
 import { useSort, sortFunctions } from './hooks/useSort';
+import { AddTaskForm } from './components/AddTaskForm';
+import { TodoList } from './components/TodoList';
 
 function App() {
-  const [newTaskName, setNewTaskName] = useState<string>('');
+  const queryClient = useQueryClient();
 
   const {
     data: tasks = [],
@@ -32,71 +33,54 @@ function App() {
   if (isLoading) return <div>Loading tasks...</div>;
   if (error) return <div>Error loading tasks: {error.message}</div>;
 
-  const addTask = () => {
-    // TODO: add implementation
+  const handleAddTask = (taskName: string) => {
+    const newTask: Task = {
+      id: Date.now() + Math.floor(Math.random() * 1000),
+      name: taskName,
+      status: TaskStatus.Todo,
+      createdAt: new Date().toISOString(),
+      listId: 1,
+    };
+
+    queryClient.setQueryData(['tasks'], (oldTasks: Task[] = []) => [
+      ...oldTasks,
+      newTask,
+    ]);
   };
 
-  const markAsDone = (id: number) => {
-    // TODO: add implementation
+  const handleMarkAsDone = (id: number) => {
+    queryClient.setQueryData(['tasks'], (oldTasks: Task[] = []) =>
+      oldTasks.map((task) =>
+        task.id === id ? { ...task, status: TaskStatus.Done } : task,
+      ),
+    );
   };
 
-  const markAsUndone = (id: number) => {
-    // TODO: add implementation
+  const handleMarkAsUndone = (id: number) => {
+    queryClient.setQueryData(['tasks'], (oldTasks: Task[] = []) =>
+      oldTasks.map((task) =>
+        task.id === id ? { ...task, status: TaskStatus.Todo } : task,
+      ),
+    );
   };
 
   return (
     <div>
       <h2>ToDo App</h2>
-      <div className="addNewTask">
-        <input
-          type="text"
-          value={newTaskName}
-          onChange={(e) => setNewTaskName(e.target.value)}
-          placeholder="Add new task"
-        />
-        <button onClick={addTask}>Add</button>
-      </div>
+      <AddTaskForm onAdd={handleAddTask} />
 
-      <h3>Tasks</h3>
       <div className="sort-control">
         <button onClick={() => toggleSort('createdAt')}>
           Sort by date {sortDirection === 'asc' ? '↑' : '↓'}
         </button>
       </div>
 
-      <table className="taskItems">
-        <tbody>
-          {sortedTasks
-            .filter((task: Task) => task.status === TaskStatus.Todo)
-            .map((task: Task) => (
-              <tr key={task.id}>
-                <td>{task.name}</td>
-                <td>
-                  <button onClick={() => markAsDone(task.id)}>
-                    Mark as done
-                  </button>
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
-      <h3>Done</h3>
-      <table className="taskItems">
-        <tbody>
-          {sortedTasks
-            .filter((task) => task.status === TaskStatus.Done)
-            .map((task) => (
-              <tr key={task.id}>
-                <td>{task.name}</td>
-                <td>
-                  <button onClick={() => markAsUndone(task.id)}>
-                    Mark as undone
-                  </button>
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
+      <TodoList
+        list={{ id: 1, name: 'Personal' }}
+        tasks={sortedTasks}
+        onMarkDone={handleMarkAsDone}
+        onMarkUndone={handleMarkAsUndone}
+      />
     </div>
   );
 }
