@@ -1,0 +1,29 @@
+# Build outputs
+dist/
+dist-ssr/
+build/
+coverage/
+
+# Dependencies
+node_modules/
+
+# Cache
+.eslintcache
+*.tsbuildinfo
+
+# Env files
+.env*
+!.env.example
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Editor directories
+.vscode/
+.idea/
+
+# System files
+.DS_Store
+Thumbs.db 

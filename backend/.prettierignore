@@ -1,0 +1,34 @@
+# Build outputs
+dist/
+build/
+coverage/
+
+# Dependencies
+node_modules/
+
+# Cache
+.eslintcache
+*.tsbuildinfo
+
+# Env files
+.env*
+!.env.example
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Test coverage
+coverage/
+
+# Editor directories
+.vscode/
+.idea/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Nest.js specific
+.nest/ 

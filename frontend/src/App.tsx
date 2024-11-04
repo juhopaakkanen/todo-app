@@ -1,10 +1,10 @@
-import { useState } from "react";
-import "./App.css";
-import { Task, TaskStatus } from "./App.type";
+import { useState } from 'react';
+import './App.css';
+import { Task, TaskStatus } from './App.type';
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [newTaskName, setNewTaskName] = useState<string>("");
+  const [newTaskName, setNewTaskName] = useState<string>('');
 
   const addTask = () => {
     // TODO: add implementation

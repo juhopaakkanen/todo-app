@@ -19,7 +19,8 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true, // TODO: check why linter gives error
+    "noImplicitReturns": true
   },
   "include": ["src"]
 }
