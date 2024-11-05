@@ -1,4 +1,4 @@
-.addNewTask {
+.add-new-task {
   display: flex;
   place-items: center;
   gap: var(--spacing-xs);

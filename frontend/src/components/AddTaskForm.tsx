@@ -15,7 +15,7 @@ export function AddTaskForm({ onAdd }: AddTaskFormProps) {
   };
 
   return (
-    <div className="addNewTask">
+    <div className="add-new-task">
       <input
         type="text"
         value={newTaskName}

@@ -6,16 +6,16 @@ export class TaskService {
   private tasks: Task[] = [
     {
       id: 1,
-      name: '1 Vacuum the living room',
+      name: 'Vacuum the living room',
       status: TaskStatus.Todo,
       createdAt: '2024-10-30T12:00:00.000Z',
       listId: 1,
     },
     {
       id: 2,
-      name: '2 Dust the kitchen',
+      name: 'Dust the kitchen',
       status: TaskStatus.Todo,
-      createdAt: '2024-11-30T10:00:00.000Z',
+      createdAt: '2024-10-30T10:00:00.000Z',
       listId: 1,
     },
     {

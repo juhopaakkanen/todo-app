@@ -2,23 +2,26 @@ import { TodoListType } from '../types';
 
 interface ListSelectorProps {
   lists: TodoListType[];
-  selectedListId: number;
-  onSelectList: (listId: number) => void;
+  selectedListId: number | null;
+  onSelectList: (listId: number | null) => void;
 }
 
-export const ListSelector = ({
+export function ListSelector({
   lists,
   selectedListId,
   onSelectList,
-}: ListSelectorProps) => {
+}: ListSelectorProps) {
   return (
     <div className="list-selector">
       <label htmlFor="list-select">Select List:</label>
       <select
         id="list-select"
-        value={selectedListId}
-        onChange={(e) => onSelectList(Number(e.target.value))}
+        value={selectedListId ?? 'all'}
+        onChange={(e) =>
+          onSelectList(e.target.value === 'all' ? null : Number(e.target.value))
+        }
       >
+        <option value="all">All Lists</option>
         {lists.map((list) => (
           <option key={list.id} value={list.id}>
             {list.name}
@@ -27,4 +30,4 @@ export const ListSelector = ({
       </select>
     </div>
   );
-};
+}

@@ -27,7 +27,7 @@ export function TaskList({
           {isDoneList ? 'Get to work!' : 'Excellent! All tasks are done!'}
         </p>
       ) : (
-        <table className="taskItems">
+        <table className="task-items">
           <tbody>
             {filteredTasks.map((task) => (
               <tr key={task.id}>

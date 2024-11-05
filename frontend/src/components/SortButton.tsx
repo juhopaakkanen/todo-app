@@ -12,7 +12,7 @@ export const SortButton = ({
   onSort,
   label,
 }: SortButtonProps) => (
-  <button onClick={onSort}>
+  <button className="sort-button" onClick={onSort}>
     {label} {sortDirection === SORT_DIRECTION.ASC ? '↑' : '↓'}
   </button>
 );

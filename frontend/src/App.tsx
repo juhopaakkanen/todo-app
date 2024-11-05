@@ -12,7 +12,7 @@ import { SORT_DIRECTION } from './constants';
 
 function App() {
   const queryClient = useQueryClient();
-  const [selectedListId, setSelectedListId] = useState(DEFAULT_LISTS[0].id);
+  const [selectedListId, setSelectedListId] = useState<number | null>(null);
 
   const {
     data: tasks = [],
@@ -23,10 +23,9 @@ function App() {
     queryFn: getTasks,
   });
 
-  const selectedList = DEFAULT_LISTS.find(
-    (list) => list.id === selectedListId,
-  )!;
-  const filteredTasks = tasks.filter((task) => task.listId === selectedListId);
+  const filteredTasks = selectedListId
+    ? tasks.filter((task) => task.listId === selectedListId)
+    : tasks;
 
   const {
     sortedItems: sortedTasks,
@@ -49,7 +48,7 @@ function App() {
       name: taskName,
       status: TaskStatus.Todo,
       createdAt: new Date().toISOString(),
-      listId: selectedListId,
+      listId: selectedListId ?? DEFAULT_LISTS[0].id,
     };
 
     queryClient.setQueryData(['tasks'], (oldTasks: Task[] = []) => [
@@ -74,6 +73,10 @@ function App() {
     );
   };
 
+  const listsToShow = selectedListId
+    ? [DEFAULT_LISTS.find((list) => list.id === selectedListId)!]
+    : DEFAULT_LISTS;
+
   return (
     <main>
       <h1>ToDo App</h1>
@@ -84,19 +87,29 @@ function App() {
         onSelectList={setSelectedListId}
       />
 
-      <AddTaskForm onAdd={handleAddTask} />
+      {selectedListId ? (
+        <AddTaskForm onAdd={handleAddTask} />
+      ) : (
+        <p className="helper-text">Select a list from above to add new tasks</p>
+      )}
 
       <SortButton
         sortDirection={sortDirection}
         onSort={() => toggleSort('createdAt')}
         label="Sort list items by date"
       />
-      <TodoList
-        list={selectedList}
-        tasks={sortedTasks}
-        onMarkDone={handleMarkAsDone}
-        onMarkUndone={handleMarkAsUndone}
-      />
+
+      <div className="lists-grid">
+        {listsToShow.map((list) => (
+          <TodoList
+            key={list.id}
+            list={list}
+            tasks={sortedTasks.filter((task) => task.listId === list.id)}
+            onMarkDone={handleMarkAsDone}
+            onMarkUndone={handleMarkAsUndone}
+          />
+        ))}
+      </div>
     </main>
   );
 }

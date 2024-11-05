@@ -6,12 +6,16 @@
 }
 
 main {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   gap: var(--spacing-md);
 }
 
 .content {
   display: flex;
   gap: var(--spacing-md);
+}
+
+.lists-grid {
+  display: grid;
+  gap: var(--spacing-lg);
 }
