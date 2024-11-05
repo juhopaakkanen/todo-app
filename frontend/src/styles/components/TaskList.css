@@ -1,0 +1,4 @@
+.taskItems {
+  border-spacing: var(--spacing-xs);
+  margin: 0 auto;
+}

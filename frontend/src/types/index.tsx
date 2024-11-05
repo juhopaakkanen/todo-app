@@ -1,3 +1,5 @@
+import { SORT_DIRECTION } from '../constants';
+
 export interface TodoListType {
   id: number;
   name: string;
@@ -15,3 +17,6 @@ export enum TaskStatus {
   Todo = 'todo',
   Done = 'done',
 }
+
+export type SortDirection =
+  (typeof SORT_DIRECTION)[keyof typeof SORT_DIRECTION];

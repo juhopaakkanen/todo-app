@@ -1,31 +1,6 @@
 import { useState, useMemo } from 'react';
-
-type SortDirection = 'asc' | 'desc';
-
-export const sortFunctions = {
-  date:
-    (key: string) =>
-    <T extends Record<string, any>>(a: T, b: T, direction: SortDirection) => {
-      const aDate = new Date(a[key]);
-      const bDate = new Date(b[key]);
-      return direction === 'asc'
-        ? aDate.getTime() - bDate.getTime()
-        : bDate.getTime() - aDate.getTime();
-    },
-  default:
-    (key: string) =>
-    <T extends Record<string, any>>(a: T, b: T, direction: SortDirection) => {
-      const aValue = a[key];
-      const bValue = b[key];
-      return direction === 'asc'
-        ? aValue > bValue
-          ? 1
-          : -1
-        : aValue < bValue
-          ? 1
-          : -1;
-    },
-};
+import { SortDirection } from '../types';
+import { SORT_DIRECTION } from '../constants';
 
 type SortFunction<T> = (a: T, b: T, direction: SortDirection) => number;
 
@@ -35,11 +10,36 @@ interface SortOptions<T> {
   customSortFns?: Record<string, SortFunction<T>>;
 }
 
+export const sortFunctions = {
+  date:
+    (key: string) =>
+    <T extends Record<string, any>>(a: T, b: T, direction: SortDirection) => {
+      const aDate = new Date(a[key]);
+      const bDate = new Date(b[key]);
+      return direction === SORT_DIRECTION.ASC
+        ? aDate.getTime() - bDate.getTime()
+        : bDate.getTime() - aDate.getTime();
+    },
+  default:
+    (key: string) =>
+    <T extends Record<string, any>>(a: T, b: T, direction: SortDirection) => {
+      const aValue = a[key];
+      const bValue = b[key];
+      return direction === SORT_DIRECTION.ASC
+        ? aValue > bValue
+          ? 1
+          : -1
+        : aValue < bValue
+          ? 1
+          : -1;
+    },
+};
+
 export function useSort<T extends Record<string, any>>(
   items: T[],
   {
     initialSortBy = null,
-    initialDirection = 'asc',
+    initialDirection = SORT_DIRECTION.ASC,
     customSortFns = {},
   }: SortOptions<T> = {},
 ) {
@@ -60,10 +60,12 @@ export function useSort<T extends Record<string, any>>(
 
   const toggleSort = (column: string) => {
     if (sortBy === column) {
-      setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+      setSortDirection((prev) =>
+        prev === SORT_DIRECTION.ASC ? SORT_DIRECTION.DESC : SORT_DIRECTION.ASC,
+      );
     } else {
       setSortBy(column);
-      setSortDirection('asc');
+      setSortDirection(SORT_DIRECTION.ASC);
     }
   };
 

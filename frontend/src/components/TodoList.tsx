@@ -1,4 +1,4 @@
-import { Task, TaskStatus, TodoListType } from '../App.type';
+import { Task, TodoListType, TaskStatus } from '../types';
 import { TaskList } from './TaskList';
 
 interface TodoListProps {
@@ -14,27 +14,30 @@ export function TodoList({
   onMarkDone,
   onMarkUndone,
 }: TodoListProps) {
-  if (tasks.length === 0)
-    return <div>No tasks currently, use the form above to add tasks</div>;
-
   return (
-    <div className="todo-lists">
+    <div className="todo-list">
       <h2>{list.name}</h2>
-      <TaskList
-        title="Tasks"
-        tasks={tasks}
-        status={TaskStatus.Todo}
-        onStatusChange={onMarkDone}
-        buttonText="Mark as done"
-      />
+      {tasks.length === 0 ? (
+        <p className="empty-state">No tasks, use the form above to add tasks</p>
+      ) : (
+        <>
+          <TaskList
+            title="Tasks"
+            tasks={tasks}
+            status={TaskStatus.Todo}
+            onStatusChange={onMarkDone}
+            buttonText="Mark as done"
+          />
 
-      <TaskList
-        title="Done"
-        tasks={tasks}
-        status={TaskStatus.Done}
-        onStatusChange={onMarkUndone}
-        buttonText="Mark as undone"
-      />
+          <TaskList
+            title="Done"
+            tasks={tasks}
+            status={TaskStatus.Done}
+            onStatusChange={onMarkUndone}
+            buttonText="Mark as undone"
+          />
+        </>
+      )}
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { Task, TaskStatus } from '../App.type';
+import { Task, TaskStatus } from '../types';
 
 interface TaskListProps {
   title: string;

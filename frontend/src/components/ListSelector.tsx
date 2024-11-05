@@ -1,4 +1,4 @@
-import { TodoListType } from '../App.type';
+import { TodoListType } from '../types';
 
 interface ListSelectorProps {
   lists: TodoListType[];
@@ -6,7 +6,7 @@ interface ListSelectorProps {
   onSelectList: (listId: number) => void;
 }
 
-const ListSelector = ({
+export const ListSelector = ({
   lists,
   selectedListId,
   onSelectList,
@@ -28,5 +28,3 @@ const ListSelector = ({
     </div>
   );
 };
-
-export default ListSelector;

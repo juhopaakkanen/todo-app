@@ -1,0 +1,6 @@
+.addNewTask {
+  display: flex;
+  place-items: center;
+  gap: var(--spacing-xs);
+  justify-content: center;
+}

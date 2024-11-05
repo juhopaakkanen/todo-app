@@ -1,13 +1,14 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import './App.css';
-import { Task, TaskStatus } from './App.type';
+import { Task, TaskStatus } from './types';
 import { getTasks } from './api/tasks';
-import { useSort, sortFunctions } from './hooks/useSort';
 import { AddTaskForm } from './components/AddTaskForm';
+import { ListSelector } from './components/ListSelector';
+import { SortButton } from './components/SortButton';
 import { TodoList } from './components/TodoList';
 import { DEFAULT_LISTS } from './constants/lists';
-import ListSelector from './components/ListSelector';
+import { useSort, sortFunctions } from './hooks/useSort';
+import { SORT_DIRECTION } from './constants';
 
 function App() {
   const queryClient = useQueryClient();
@@ -33,7 +34,7 @@ function App() {
     toggleSort,
   } = useSort<Task>(filteredTasks, {
     initialSortBy: 'createdAt',
-    initialDirection: 'desc',
+    initialDirection: SORT_DIRECTION.ASC,
     customSortFns: {
       createdAt: sortFunctions.date('createdAt'),
     },
@@ -85,12 +86,11 @@ function App() {
 
       <AddTaskForm onAdd={handleAddTask} />
 
-      <div className="sort-control">
-        <button onClick={() => toggleSort('createdAt')}>
-          Sort by date {sortDirection === 'asc' ? '↑' : '↓'}
-        </button>
-      </div>
-
+      <SortButton
+        sortDirection={sortDirection}
+        onSort={() => toggleSort('createdAt')}
+        label="Sort list items by date"
+      />
       <TodoList
         list={selectedList}
         tasks={sortedTasks}

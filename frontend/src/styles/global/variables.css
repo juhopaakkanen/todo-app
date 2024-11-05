@@ -1,0 +1,29 @@
+:root {
+  /* Colors */
+  --color-primary: #646cff;
+  --color-primary-hover: #535bf2;
+  --color-background: #242424;
+  --color-text: rgba(255, 255, 255, 0.87);
+  --color-border: #ccc;
+  --color-empty-state: #666;
+
+  /* Link colors */
+  --color-link: #646cff;
+  --color-link-hover: #535bf2;
+
+  /* Button colors */
+  --color-button-bg: #1a1a1a;
+  --color-button-hover-border: #646cff;
+
+  /* Spacing */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+
+  /* Typography */
+  --font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --font-size-base: 1rem;
+  --line-height-base: 1.5;
+  --font-weight-base: 400;
+}

@@ -1,4 +1,4 @@
-import { Task } from '../App.type';
+import { Task } from '../types';
 
 const API_URL = 'http://localhost:3000';
 

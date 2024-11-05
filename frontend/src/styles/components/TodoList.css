@@ -1,0 +1,8 @@
+.todo-list {
+  display: grid;
+  gap: var(--spacing-md);
+  border: 1px solid var(--color-border);
+  padding: var(--spacing-md);
+  border-radius: var(--spacing-sm);
+  min-height: 360px;
+}

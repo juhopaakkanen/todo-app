@@ -1,0 +1,10 @@
+.list-selector {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: center;
+  align-items: center;
+}
+
+.list-selector label {
+  font-size: 1.2rem;
+}
