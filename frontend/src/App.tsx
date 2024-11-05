@@ -8,6 +8,7 @@ import { SORT_DIRECTION } from './constants';
 import { DEFAULT_LISTS } from './constants/lists';
 import { useSort, sortFunctions } from './hooks/useSort';
 import { useTasks } from './hooks/useTasks';
+import { AsyncStateWrapper } from './common/AsyncStateWrapper';
 
 function App() {
   const [selectedListId, setSelectedListId] = useState<number | null>(null);
@@ -29,9 +30,6 @@ function App() {
     },
   });
 
-  if (isLoading) return <div>Loading tasks...</div>;
-  if (error) return <div>Error loading tasks: {error.message}</div>;
-
   const handleAddTask = (name: string) => {
     addTask.mutate({
       name,
@@ -52,39 +50,48 @@ function App() {
     : DEFAULT_LISTS;
 
   return (
-    <main>
-      <h1>ToDo App</h1>
+    <AsyncStateWrapper
+      isLoading={isLoading}
+      error={error}
+      loadingMessage="Loading tasks..."
+      errorMessage="Error loading tasks:"
+    >
+      <main>
+        <h1>ToDo App</h1>
 
-      <ListSelector
-        lists={DEFAULT_LISTS}
-        selectedListId={selectedListId}
-        onSelectList={setSelectedListId}
-      />
+        <ListSelector
+          lists={DEFAULT_LISTS}
+          selectedListId={selectedListId}
+          onSelectList={setSelectedListId}
+        />
 
-      {selectedListId ? (
-        <AddTaskForm onAdd={handleAddTask} />
-      ) : (
-        <p className="helper-text">Select a list from above to add new tasks</p>
-      )}
+        {selectedListId ? (
+          <AddTaskForm onAdd={handleAddTask} />
+        ) : (
+          <p className="helper-text">
+            Select a list from above to add new tasks
+          </p>
+        )}
 
-      <SortButton
-        sortDirection={sortDirection}
-        onSort={() => toggleSort('createdAt')}
-        label="Sort list items by date"
-      />
+        <SortButton
+          sortDirection={sortDirection}
+          onSort={() => toggleSort('createdAt')}
+          label="Sort list items by date"
+        />
 
-      <div className="lists-grid">
-        {listsToShow.map((list) => (
-          <TodoList
-            key={list.id}
-            list={list}
-            tasks={sortedTasks.filter((task) => task.listId === list.id)}
-            onMarkDone={handleMarkAsDone}
-            onMarkUndone={handleMarkAsUndone}
-          />
-        ))}
-      </div>
-    </main>
+        <div className="lists-grid">
+          {listsToShow.map((list) => (
+            <TodoList
+              key={list.id}
+              list={list}
+              tasks={sortedTasks.filter((task) => task.listId === list.id)}
+              onMarkDone={handleMarkAsDone}
+              onMarkUndone={handleMarkAsUndone}
+            />
+          ))}
+        </div>
+      </main>
+    </AsyncStateWrapper>
   );
 }
 
